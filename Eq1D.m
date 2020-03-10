@@ -43,7 +43,7 @@ for n = 1:dur
          else
             uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
          end
-         u(1)
+         %u(1)
      end
     
     % retrieve output
