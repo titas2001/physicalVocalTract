@@ -36,7 +36,7 @@ for n = 1:dur
      %nested for-loop
      exciter(n) = sawtooth(2*pi*100*n/fs);
      u(1) = exciter(n);
-     u(1)
+     %u(1)
      for l = 2:N
          if l == N %Free end
             uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
@@ -50,10 +50,10 @@ for n = 1:dur
     out(n) = uNext(outPos);
     
     % draw string
-    %plot(uNext);
+    plot(uNext);
     %plot(exiciter);
-    %ylim([-1, 1]);
-    %drawnow;
+    ylim([-1, 1]);
+    drawnow;
     
     uPrev = u;
     u = uNext;
