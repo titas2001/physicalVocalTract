@@ -1,21 +1,21 @@
 function [S] = Shape(N, curveStartPos,  maxWidth, shapeType )
  
-%{
-    Shape function inputs:
-    [N] determines the length of the tube
-
-    [curveStartPos] value betweem 0 and 1, determines where selected curve starts 
-        in function 0 is start and 1 is end
-
-    [maxWidth] determines width of the tube in the open end of the tube 
-
-    [shapeType] 'linear' or 'exp' changes the type of curve after curveStartPos 
-
-    example:
-
-    Shape(N,0.5, 4, 'linear') will get function with linear curve with max
-    value 4 and the curve will start at halfway point of N
-%}
+%
+%     Shape function inputs:
+%     [N] determines the length of the tube
+% 
+%     [curveStartPos] value betweem 0 and 1, determines where selected curve starts 
+%         in function 0 is start and 1 is end
+% 
+%     [maxWidth] determines width of the tube in the open end of the tube 
+% 
+%     [shapeType] 'linear' or 'exp' changes the type of curve after curveStartPos 
+% 
+%     example:
+% 
+%     Shape(N,0.5, 4, 'linear') will get function with linear curve with max
+%     value 4 and the curve will start at halfway point of N
+%
     if  shapeType == "exp" 
         S = ones(N,1);
         D = ceil(N*curveStartPos);
