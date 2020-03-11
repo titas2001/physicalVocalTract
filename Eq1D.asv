@@ -1,9 +1,11 @@
 clear all; 
 close all;
 
+IR = 0;
+
 fs = 44100;         % sample rate
 k = 1 / fs;         % time step
-dur = fs;           % duration
+dur = 3*fs;           % duration
 
 % Define speed of sound
 c = 344;
@@ -16,7 +18,8 @@ N = floor(1/h); %length of the tube
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2
 
-%Damp coeffifient
+%Damp coefficient
+%(something weird happens if beta>=3.427, investigate)
 beta = 2;
 
 % Initialise spatial states u(n+1) and u(n)
@@ -24,7 +27,10 @@ uNext = zeros(N, 1);
 u = zeros(N, 1);
 
 % Exiciting with impulse at closed end
-u(2) = 1; 
+% (Impulse response)
+if IR
+    u(2) = 1; 
+end
 
 % Initialise spatial state u(n-1)
 uPrev = u;
@@ -40,17 +46,8 @@ exciter = zeros(1,dur);
 
 for n = 1:dur 
      %Exciter processing
-     exciter(n) = sawtooth(2*pi*20*(n-1)/fs);
-     %u(1) = exciter(n);
-     
-%      %Wave processing damp center derivative
-%      for l = 2:N
-%          if l == N %Free end
-%             uNext(l) = (4/(2+beta*k)) * u(l) + (beta*beta*k*k/4 - 1) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (2 * u(l-1) - 2 * u(l)); 
-%          else
-%             uNext(l) = (4/(2+beta*k)) * u(l) + (beta*beta*k*k/4 - 1) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (u(l+1) - 2 * u(l) + u(l-1));
-%          end
-%      end
+     exciter(n) = sawtooth(2*pi*80*(n-1)/fs);
+     %u(2) = exciter(n);
      
      %Wave processing damp backwards derivative
      for l = 2:N
@@ -60,6 +57,15 @@ for n = 1:dur
             uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
          end
      end
+     
+%      %Wave processing damp center derivative
+%      for l = 2:N
+%          if l == N %Free end
+%             uNext(l) = (4/(2+beta*k)) * u(l) + (beta*beta*k*k/4 - 1) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (2 * u(l-1) - 2 * u(l)); 
+%          else
+%             uNext(l) = (4/(2+beta*k)) * u(l) + (beta*beta*k*k/4 - 1) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (u(l+1) - 2 * u(l) + u(l-1));
+%          end
+%      end
 
 %      %Wave processing no damp
 %      for l = 2:N
@@ -88,7 +94,7 @@ soundsc(out, fs);
 
 %Plotting Output
 freqScaling = fs/dur;
-freqAxis = freqScaling:freqScaling:(freqScaling*dur);
+freqAxis = 0:freqScaling:(freqScaling*dur);
 transform = abs(fft(out));
 tiledlayout(2,1)
 % Top plot

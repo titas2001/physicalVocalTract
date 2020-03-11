@@ -1,6 +1,9 @@
 clear all; 
 close all;
 
+%If looking for Impulse Response set IR != 0
+IR = 0;
+
 fs = 44100;         % sample rate
 k = 1 / fs;         % time step
 dur = 3*fs;           % duration
@@ -14,7 +17,7 @@ N = floor(1/h); %length of the tube
 %h = 1 / N;
 
 % Calculate courant number
-lambdaSq = c^2 * k^2 / h^2
+lambdaSq = c^2 * k^2 / h^2;
 
 %Damp coefficient
 %(something weird happens if beta>=3.427, investigate)
@@ -26,7 +29,9 @@ u = zeros(N, 1);
 
 % Exiciting with impulse at closed end
 % (Impulse response)
-%u(2) = 1; 
+if IR
+    u(2) = 1; 
+end
 
 % Initialise spatial state u(n-1)
 uPrev = u;
@@ -43,7 +48,9 @@ exciter = zeros(1,dur);
 for n = 1:dur 
      %Exciter processing
      exciter(n) = sawtooth(2*pi*80*(n-1)/fs);
-     u(2) = exciter(n);
+     if ~IR
+        u(2) = exciter(n);
+     end
      
      %Wave processing damp backwards derivative
      for l = 2:N
@@ -99,7 +106,7 @@ plot(out)
 title('Time')
 % Bottom plot
 nexttile
-plot(freqAxis(1:22050),transform(1:22050))
+plot(freqAxis(1:66150),transform(1:66150))
 title('Freq')
 
 %plot(exiciter)
