@@ -1,6 +1,14 @@
 clear all; 
 close all;
 
+%If looking for Impulse Response set IR != 0
+IR = 1;
+
+%Shape parameters
+curveStartPos = 0.9;
+maxWidth = 2;
+shapeType = 'flat';
+
 fs = 44100;         % sample rate
 k = 1 / fs;         % time step
 dur = 3*fs;           % duration
@@ -14,11 +22,11 @@ N = floor(1/h); %length of the tube
 %h = 1 / N;
 
 % Calculate courant number
-lambdaSq = c^2 * k^2 / h^2
+lambdaSq = c^2 * k^2 / h^2;
 
 %Damp coefficient
 %(something weird happens if beta>=3.427, investigate)
-beta = 2;
+beta = 0;
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -26,7 +34,9 @@ u = zeros(N, 1);
 
 % Exiciting with impulse at closed end
 % (Impulse response)
-%u(2) = 1; 
+if IR
+    u(2) = 1; 
+end
 
 % Initialise spatial state u(n-1)
 uPrev = u;
@@ -39,20 +49,26 @@ outPos = N;
 
 % Initialising excitation function
 exciter = zeros(1,dur);
+exticerFreq = 50;
+
+%Shape function
+S = Shape(N+1, curveStartPos,  maxWidth, shapeType);
 
 for n = 1:dur 
      %Exciter processing
-     exciter(n) = sawtooth(2*pi*80*(n-1)/fs);
-     u(2) = exciter(n);
-     
-     %Wave processing damp backwards derivative
-     for l = 2:N
-         if l == N %Free end
-            uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
-         else
-            uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
-         end
+     exciter(n) = sawtooth(2*pi*exticerFreq*(n-1)/fs);
+     if ~IR
+        u(2) = exciter(n);
      end
+     
+%      %Wave processing damp backwards derivative
+%      for l = 2:N
+%          if l == N %Free end
+%             uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
+%          else
+%             uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
+%          end
+%      end
      
 %      %Wave processing damp center derivative
 %      for l = 2:N
@@ -63,7 +79,17 @@ for n = 1:dur
 %          end
 %      end
 
-%      %Wave processing no damp
+%      Wave processing no damp shape function
+     for l = 2:N
+         Smean = (S(l) + S(l+1))/2;
+         if l == N %Free end
+            uNext(l) = 2*(1-lambdaSq) * u(l) - uPrev(l) + (lambdaSq * S(l+1)/Smean) * u(l-1) + (lambdaSq * S(l)/Smean) * u(l-1); 
+         else
+            uNext(l) = 2*(1-lambdaSq) * u(l) - uPrev(l) + (lambdaSq * S(l+1)/Smean) * u(l+1) + (lambdaSq * S(l)/Smean) * u(l-1);
+         end
+     end
+
+% %      Wave processing no damp
 %      for l = 2:N
 %          if l == N %Free end
 %             uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
@@ -92,14 +118,17 @@ soundsc(out, fs);
 freqScaling = fs/dur;
 freqAxis = freqScaling:freqScaling:(freqScaling*dur);
 transform = abs(fft(out));
-tiledlayout(2,1)
+figure(1)
+tiledlayout(3,1)
 % Top plot
 nexttile
 plot(out)
 title('Time')
 % Bottom plot
 nexttile
-plot(freqAxis(1:22050),transform(1:22050))
+plot(freqAxis(1:66150),transform(1:66150))
 title('Freq')
-
+nexttile
+plot(S);
+title('Shape')
 %plot(exiciter)
