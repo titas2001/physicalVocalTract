@@ -2,11 +2,11 @@ clear all;
 close all;
 
 %If looking for Impulse Response set IR != 0
-IR = 0;
+IR = 1;
 
 %Shape parameters
-curveStartPos = 0.9;
-maxWidth = 6;
+curveStartPos = 0.5;
+maxWidth = 4;
 shapeType = 'exp';
 
 %Damp coefficient
@@ -26,10 +26,6 @@ N = floor(1/h); %length of the tube
 
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
-
-% Initialising excitation function
-exciter = zeros(1,dur);
-exticerFreq = 100;
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -51,6 +47,10 @@ out = zeros(dur, 1);
 
 % Defining where output is observed, in our case the end of the tube
 outPos = N;
+
+% Initialising excitation function
+exciter = zeros(1,dur);
+exticerFreq = 50;
 
 %Shape function
 S = Shape(N+1, curveStartPos,  maxWidth, shapeType);
@@ -85,11 +85,12 @@ for n = 1:dur
          Smean = (S(l) + S(l+1))/2;
          coeff = 2*Smean+beta*k;
          if l == N %Free end
-            spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(3*u(l-1) - 3*u(l));
+            spaceDer = S(l+1)*(u(l) - u(l-1)) + S(l)*(3*u(l-1) - 3*u(l));
+            uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * spaceDer;
          else
-            spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(u(l+1) - 3*u(l) + 2*u(l-1));
+             spaceDer 
+            uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * (S(l+1)*(u(l) - u(l-1)) + S(l)*(u(l+1) - 3*u(l) + 2*u(l-1)));
          end
-         uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * spacePart;
      end
 
 % %      Wave processing no damp shape function
@@ -144,5 +145,4 @@ title('Freq')
 nexttile
 plot(S);
 title('Shape')
-
 %plot(exiciter)
