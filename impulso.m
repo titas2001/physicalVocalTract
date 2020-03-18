@@ -9,18 +9,22 @@ function [imp] = impulso(mode, freq, fs, time)
 % fs = sampling frequency
 % time = length of the signal
 
-t = 0:1/fs:time;
+t = 1:time;
 
 switch mode
     
-    case 'sine_Pulse'
+    case 'sinepulse'
         
-        imp = sin(2*pi*freq*t);
+        imp = sin(2*pi*freq*t/fs);
         imp(imp<0) = 0;
         
-    case 'saw_Tooth'
+    case 'sawpulse'
         
-        imp = sawtooth(2*pi*freq*t);
+        imp = sawtooth(2*pi*freq*t/fs);
         imp(imp<0) = 0;
+        
+    case 'sawtooth'
+        
+        imp = sawtooth(2*pi*freq*t/fs);
 
 end

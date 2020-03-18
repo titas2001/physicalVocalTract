@@ -28,8 +28,7 @@ N = floor(1/h); %length of the tube
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
 
-% Initialising excitation function
-exciter = zeros(1,dur);
+% Exciter frequency
 exticerFreq = 100;
 
 % Initialise spatial states u(n+1) and u(n)
@@ -56,10 +55,9 @@ outPos = N;
 %Shape function (*2 because we loor for the area, not sure about this
 %though)
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType) * 2;
+exciter = impulso('sinepulse', exticerFreq, fs, dur);
 
 for n = 1:dur 
-     %Exciter processing
-     exciter(n) = sawtooth(2*pi*exticerFreq*(n-1)/fs);
      if ~IR
          %Multiplying by shape so it's not [-1,1] because it seems
          %reasonable but maybe it's not
@@ -101,4 +99,4 @@ nexttile
 plot(S);
 title('Shape')
 
-%plot(exiciter)
+plot(exciter)
