@@ -65,7 +65,7 @@ for n = 1:dur
          %reasonable but maybe it's not
         u(2) = exciter(n) * S(2)/2;
      end
-     
+     %[u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 2);
 %      %Wave processing damp backwards derivative
 %      for l = 2:N
 %          if l == N %Free end
@@ -85,16 +85,16 @@ for n = 1:dur
 %      end
 
 %Wave processing shape damp center derivative
-     for l = 2:N
-         Smean = (S(l) + S(l+1))/2;
-         coeff = 2*Smean+beta*k;
-         if l == N %Free end
-            spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(3*u(l-1) - 3*u(l));
-         else
-            spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(u(l+1) - 3*u(l) + 2*u(l-1));
-         end
-         uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * spacePart;
-     end
+%      for l = 2:N
+%          Smean = (S(l) + S(l+1))/2;
+%          coeff = 2*Smean+beta*k;
+%          if l == N %Free end
+%             spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(3*u(l-1) - 3*u(l));
+%          else
+%             spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(u(l+1) - 3*u(l) + 2*u(l-1));
+%          end
+%          uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * spacePart;
+%      end
 
 % %      Wave processing no damp shape function
 %      for l = 2:N
