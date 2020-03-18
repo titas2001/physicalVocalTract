@@ -5,13 +5,13 @@ close all;
 IR = 0;
 
 %Shape parameters
-curveStartPos = 0.6;
-maxWidth = 1;
+curveStartPos = 0.8;
+maxWidth = 0.08;
 minWidth = 0.02;
-shapeType = 'linear';
+shapeType = 'exp';
 
 %Damp coefficient
-beta = 1;
+beta = 0.3;
 
 fs = 44100;         % sample rate
 k = 1 / fs;         % time step
@@ -30,7 +30,7 @@ lambdaSq = c^2 * k^2 / h^2;
 
 % Initialising excitation function
 exciter = zeros(1,dur);
-exticerFreq = 100;
+exticerFreq = 50;
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -61,7 +61,9 @@ for n = 1:dur
      %Exciter processing
      exciter(n) = sawtooth(2*pi*exticerFreq*(n-1)/fs);
      if ~IR
-        u(2) = exciter(n);
+         %Multiplying by shape so it's not [-1,1] because it seems
+         %reasonable but maybe it's not
+        u(2) = exciter(n) * S(2)/2;
      end
      
 %      %Wave processing damp backwards derivative
