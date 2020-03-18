@@ -6,8 +6,8 @@ IR = 0;
 
 %Shape parameters
 curveStartPos = 0.8;
-maxWidth = 0.08;
-minWidth = 0.02;
+maxWidth = 0.06;
+minWidth = 0.01;
 shapeType = 'exp';
 
 %Damp coefficient
@@ -30,7 +30,7 @@ lambdaSq = c^2 * k^2 / h^2;
 
 % Initialising excitation function
 exciter = zeros(1,dur);
-exticerFreq = 50;
+exticerFreq = 100;
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -65,55 +65,7 @@ for n = 1:dur
          %reasonable but maybe it's not
         u(2) = exciter(n) * S(2)/2;
      end
-     %[u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 2);
-%      %Wave processing damp backwards derivative
-%      for l = 2:N
-%          if l == N %Free end
-%             uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
-%          else
-%             uNext(l) = (2-beta*k) * u(l) + (beta*k-1) * uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
-%          end
-%      end
-     
-% %      Wave processing damp center derivative
-%      for l = 2:N
-%          if l == N %Free end
-%             uNext(l) = (4/(2+beta*k)) * u(l) + ((beta*k-2)/(beta*k+2)) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (2 * u(l-1) - 2 * u(l)); 
-%          else
-%             uNext(l) = (4/(2+beta*k)) * u(l) + ((beta*k-2)/(beta*k+2)) * uPrev(l) + (2*lambdaSq/(2+beta*k)) * (u(l+1) - 2 * u(l) + u(l-1));
-%          end
-%      end
-
-%Wave processing shape damp center derivative
-%      for l = 2:N
-%          Smean = (S(l) + S(l+1))/2;
-%          coeff = 2*Smean+beta*k;
-%          if l == N %Free end
-%             spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(3*u(l-1) - 3*u(l));
-%          else
-%             spacePart = S(l+1)*(u(l) - u(l-1)) + S(l)*(u(l+1) - 3*u(l) + 2*u(l-1));
-%          end
-%          uNext(l) = (4*Smean/coeff) * u(l) + ((beta*k-2*Smean)/coeff) * uPrev(l) + (2*lambdaSq/coeff) * spacePart;
-%      end
-
-% %      Wave processing no damp shape function
-%      for l = 2:N
-%          Smean = (S(l) + S(l+1))/2;
-%          if l == N %Free end
-%             uNext(l) = 2*(1-lambdaSq) * u(l) - uPrev(l) + (lambdaSq * S(l+1)/Smean) * u(l-1) + (lambdaSq * S(l)/Smean) * u(l-1); 
-%          else
-%             uNext(l) = 2*(1-lambdaSq) * u(l) - uPrev(l) + (lambdaSq * S(l+1)/Smean) * u(l+1) + (lambdaSq * S(l)/Smean) * u(l-1);
-%          end
-%      end
-
-% %      Wave processing no damp
-%      for l = 2:N
-%          if l == N %Free end
-%             uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (2 * u(l-1) - 2 * u(l)); 
-%          else
-%             uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
-%          end
-%      end
+     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 2);
      
     % Retrieve output, filling output vector
     out(n) = uNext(outPos);
