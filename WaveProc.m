@@ -3,11 +3,10 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % choose equation with 'number':
 %    0 --> Wave processing damp backwards derivative
-%    1 --> Wave processing damp backwards derivative
-%    2 --> Wave processing damp backwards derivative
-%    3 --> Wave processing damp backwards derivative
-%    4 --> Wave processing damp backwards derivative
-
+%    1 --> Wave processing damp center derivative
+%    2 --> Wave processing shape damp center derivative
+%    3 --> Wave processing no damp shape function
+%    4 --> Wave processing no damp
 
 switch number
     case 0
@@ -29,7 +28,7 @@ switch number
              end
          end
     case 2
-        %Wave processing shape damp center derivative
+        % Wave processing shape damp center derivative
          for l = 2:N
              Smean = (S(l) + S(l+1))/2;
              coeff = 2*Smean+beta*k;
