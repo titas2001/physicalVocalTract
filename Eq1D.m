@@ -5,9 +5,10 @@ close all;
 IR = 0;
 
 %Shape parameters
-curveStartPos = 0.9;
-maxWidth = 6;
-shapeType = 'exp';
+curveStartPos = 0.6;
+maxWidth = 1;
+minWidth = 0.02;
+shapeType = 'linear';
 
 %Damp coefficient
 beta = 1;
@@ -52,8 +53,9 @@ out = zeros(dur, 1);
 % Defining where output is observed, in our case the end of the tube
 outPos = N;
 
-%Shape function
-S = Shape(N+1, curveStartPos,  maxWidth, shapeType);
+%Shape function (*2 because we loor for the area, not sure about this
+%though)
+S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType) * 2;
 
 for n = 1:dur 
      %Exciter processing

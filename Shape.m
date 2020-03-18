@@ -1,4 +1,4 @@
-function [S] = Shape(N, curveStartPos,  maxWidth, shapeType )
+function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
  
 %
 %     Shape function inputs:
@@ -6,13 +6,15 @@ function [S] = Shape(N, curveStartPos,  maxWidth, shapeType )
 % 
 %     [curveStartPos] value betweem 0 and 1, determines where selected curve starts 
 %         in function 0 is start and 1 is end
-% 
+%       
+%     [minWidth] determines width of the tube in the flat part
+%
 %     [maxWidth] determines width of the tube in the open end of the tube 
 % 
 %     [shapeType] 'linear' or 'exp' changes the type of curve after
 %                  curveStartPos 
-%                 'flat' creates a flat tube of amplitude maxWidth. Ignores
-%                 curveStartPos
+%                 'flat' creates a flat tube of amplitude minWidth. Ignores
+%                 curveStartPos and maxWidth
 % 
 %     example:
 % 
@@ -32,26 +34,26 @@ function [S] = Shape(N, curveStartPos,  maxWidth, shapeType )
     
     % exponential curve shape
     if  shapeType == "exp" 
-        S = ones(N,1);
+        S = ones(N,1) * minWidth;
         D = ceil(N*curveStartPos);
-        expPower = (log(maxWidth))/(log(exp(1))*(N-D));
-        for i = D:1:N
-            S(i) = exp((i-D)*expPower);
+        expPower = log(1-minWidth+maxWidth)/(N-D-1);
+        for i = 1:(N-D)
+            S(i+D) = exp((i-1)*expPower) - 1 + minWidth;
         end
     end
     
     % linear curve shape
     if shapeType  == "linear"
-        S = ones(N,1);
+        S = ones(N,1) * minWidth;
         D = floor(N*curveStartPos);
-        c = (maxWidth-1)/(N-D);
+        c = (maxWidth-minWidth)/(N-D);
         for i = D:N
-            S(i) = (i-D)*c + 1;
+            S(i) = (i-D)*c + minWidth;
         end
     end
     
     if shapeType == "flat"
-        S = ones(1,N) * maxWidth;
+        S = ones(1,N) * minWidth;
     end
 end
 
