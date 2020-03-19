@@ -55,7 +55,7 @@ outPos = N;
 %Shape function (*2 because we loor for the area, not sure about this
 %though)
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType) * 2;
-exciter = impulso('sinepulse', exticerFreq, fs, dur);
+exciter = Impulso('sinepulse', exticerFreq, fs, dur, 45);
 
 for n = 1:dur 
      if ~IR
@@ -99,4 +99,5 @@ nexttile
 plot(S);
 title('Shape')
 
+figure(2)
 plot(exciter)
