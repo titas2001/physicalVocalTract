@@ -6,3 +6,4 @@ TODO
 - model correct length of vocal tract-->we need to check for correct resonances
 - Start changing spatial and temporal sampling: we probably need a lower h->sampling frequency change accordingly, then downsample for sound. Check paper "Characteristics of Two-Dimensional Finite Difference Techniques for Vocal Tract Analysis and Voice Synthesis"
 - how do we evaluate the model? Literature review
+- implement sound radiation at open end-->other boundary condition rather than Neumann or Dirichlet
