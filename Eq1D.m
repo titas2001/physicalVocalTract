@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'exp';
+shapeType = 'u';
 
 %Damp coefficient
 beta = 0.3;
@@ -23,7 +23,7 @@ c = 344;
 % Calculate grid spacing from variables
 h = c * k;
 N = floor(1/h); %length of the tube
-%h = 1 / N;
+h = 1 / N;
 
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
@@ -63,7 +63,7 @@ for n = 1:dur
          %reasonable but maybe it's not
         u(2) = exciter(n) * S(2)/2;
      end
-     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 2);
+     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 3);
      
     % Retrieve output, filling output vector
     out(n) = uNext(outPos);
@@ -96,7 +96,9 @@ nexttile
 plot(freqAxis(1:66150),transform(1:66150))
 title('Freq')
 nexttile
-plot(S);
+plot(S/2);
+hold on
+plot(-S/2);
 title('Shape')
 
 figure(2)
