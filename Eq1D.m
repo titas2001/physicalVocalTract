@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'u';
+shapeType = 'i';
 
 %Damp coefficient
 beta = 0.3;
@@ -19,6 +19,8 @@ dur = 3*fs;           % duration
 
 % Define speed of sound
 c = 344;
+% Air density at 15°C, 1 atm
+ro = 1.115; 
 
 % Calculate grid spacing from variables
 h = c * k;
@@ -54,25 +56,26 @@ outPos = N;
 
 %Shape function (*2 because we loor for the area, not sure about this
 %though)
-S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType) * 2;
+S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 exciter = Impulso('sinepulse', exticerFreq, fs, dur, 45);
 
-for n = 1:dur 
-     if ~IR
-         %Multiplying by shape so it's not [-1,1] because it seems
-         %reasonable but maybe it's not
-        u(2) = exciter(n) * S(2)/2;
-     end
-     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, 3);
+for n = 1:dur
+    if ~IR
+        %Multiplying by shape so it's not [-1,1] because it seems
+        %reasonable but maybe it's not
+       u(2) = exciter(n) * S(2)/2;
+    end
+    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, c, S, 5, 1);
      
-    % Retrieve output, filling output vector
-    out(n) = uNext(outPos);
-    
-%     % Real time states drawing
-%     plot(uNext);
-%     %plot(exiciter);
-%     ylim([-1, 1]);
-%     drawnow;
+    % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
+    out(n) = (ro*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    %out(n) = uNext(outPos);
+
+    %     % Real time states drawing
+%         plot(uNext);
+%         %plot(exiciter);
+%         ylim([-0.01, 0.01]);
+%         drawnow;
     
     % Update spatial states
     uPrev = u;
@@ -101,5 +104,5 @@ hold on
 plot(-S/2);
 title('Shape')
 
-figure(2)
-plot(exciter)
+% figure(2)
+% plot(exciter)
