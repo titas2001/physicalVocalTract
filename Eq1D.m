@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'i';
+shapeType = 'a';
 
 %Damp coefficient
 beta = 0.3;
@@ -82,7 +82,7 @@ for n = 1:dur
     u = uNext;
 end
 
-soundsc(out, fs);
+% soundsc(out, fs);
 
 %Plotting Output
 freqScaling = fs/dur;
@@ -94,10 +94,12 @@ tiledlayout(3,1)
 nexttile
 plot(out)
 title('Time')
+xlabel('samples')
 % Bottom plot
 nexttile
 plot(freqAxis(1:66150),transform(1:66150))
 title('Freq')
+xlabel('Hz')
 nexttile
 plot(S/2);
 hold on
