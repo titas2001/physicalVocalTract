@@ -69,7 +69,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = iArray(16)*0.001;
         S = transpose(S);
-        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "e"
         leftover = N-floor(N/16)*16;
@@ -78,7 +78,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = eArray(16)*0.001;
         S = transpose(S);
-        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "a"
         leftover = N-floor(N/16)*16;
@@ -87,7 +87,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = aArray(16)*0.001;
         S = transpose(S);
-        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "o"
         leftover = N-floor(N/16)*16;
@@ -96,7 +96,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = oArray(16)*0.001;
         S = transpose(S);
-        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "u"
         leftover = N-floor(N/16)*16;
@@ -105,6 +105,6 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = uArray(16)*0.001;
         S = transpose(S);
-        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
 end
