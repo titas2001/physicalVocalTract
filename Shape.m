@@ -18,7 +18,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
 % 
 %     example:
 % 
-%     Shape(N,0.5, 4, 'linear') will get function with linear curve with max
+%     Shape(N,0.5,0.5, 4, 'linear') will get function with linear curve with max
 %     value 4 and the curve will start at halfway point of N
 %
     % check if inputs are valid
@@ -31,7 +31,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     if maxWidth <= 0
         error('maxWidth has to be a possitive number');
     end
-        
+        % sizes are in mm
     iArray = [12 12 32 32 32 32 32 32 24 16 10 10 10 12 14 24];
     eArray = [12 12 30 30 30 30 28 24 18 16 16 18 20 22 22 24];
     aArray = [12 12 26 16 12 14 20 26 30 34 38 38 34 30 28 32];
@@ -69,6 +69,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = iArray(16)*0.001;
         S = transpose(S);
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
     end
     if shapeType  == "e"
         leftover = N-floor(N/16)*16;
@@ -76,6 +77,8 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
             S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = eArray(i)*0.001;
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = eArray(16)*0.001;
+        S = transpose(S);
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
     end
     if shapeType  == "a"
         leftover = N-floor(N/16)*16;
@@ -83,6 +86,8 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
             S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = aArray(i)*0.001;
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = aArray(16)*0.001;
+        S = transpose(S);
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
     end
     if shapeType  == "o"
         leftover = N-floor(N/16)*16;
@@ -91,6 +96,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = oArray(16)*0.001;
         S = transpose(S);
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
     end
     if shapeType  == "u"
         leftover = N-floor(N/16)*16;
@@ -98,6 +104,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
             S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = uArray(i)*0.001;
         end
         S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = uArray(16)*0.001;
+        S = transpose(S);
+        S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05)
     end
 end
-
