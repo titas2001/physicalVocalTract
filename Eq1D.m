@@ -24,8 +24,9 @@ ro = 1.115;
 
 % Calculate grid spacing from variables
 h = c * k;
-N = floor(1/h); %length of the tube
-h = 1 / N;
+L = 0.5;
+N = floor(L/h); %length of the tube
+%h = 0.17 / N;
 
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
@@ -65,7 +66,7 @@ for n = 1:dur
         %reasonable but maybe it's not
        u(2) = exciter(n) * S(2)/2;
     end
-    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, c, S, 5, 1);
+    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5, 1);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     out(n) = (ro*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
@@ -82,7 +83,7 @@ for n = 1:dur
     u = uNext;
 end
 
-% soundsc(out, fs);
+soundsc(out, fs);
 
 %Plotting Output
 freqScaling = fs/dur;

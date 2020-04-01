@@ -10,3 +10,4 @@ TODO
 - time-varying profiles
 - virtual grid points
 - find right value for h, it's not the one we are using anymore(R)
+- fix input with equation pg 270

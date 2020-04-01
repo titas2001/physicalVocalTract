@@ -2,7 +2,7 @@
 TODO: check virtual grid points, especially for boundary conditions
 %}
 
-function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, c, S, number, bound)
+function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, number, bound)
 % Wave Processing: runs selected update equation call function:
 % [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % choose equation with 'number':
@@ -18,8 +18,10 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, c, S, nu
 %    1 --> Energy loss condition
 
 % radiation parameters
-alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
-bet = 0.7407/c/N;
+%alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
+% bet = 0.7407/c/N;
+alf = L/(2*0.8216^2*c);
+bet = L/(0.8216*sqrt(S(1)*S(2)/pi));
 
 switch number
     case 0
