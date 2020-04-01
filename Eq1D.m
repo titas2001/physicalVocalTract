@@ -24,9 +24,9 @@ ro = 1.115;
 
 % Calculate grid spacing from variables
 h = c * k;
-L = 0.5;
+L = 1;
 N = floor(L/h); %length of the tube
-%h = 0.17 / N;
+%h = L / N;
 
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
