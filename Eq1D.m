@@ -8,12 +8,13 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'i';
+shapeType = 'a';
 
 %Damp coefficient (not used yet)
 beta = 0.3;
 
-fs = 44100;                 % sample rate
+% fs = 44100;                 % sample rate
+fs = 157870;                 % sample rate
 k = 1 / fs;                 % time step [s]
 dur = 3*fs;                 % duration [samples]
 
@@ -25,10 +26,11 @@ rho = 1.115;
 
 % Calculate grid spacing from variables
 h = c * k;
-L = 1;                      % Tube length [m] 
+L = 0.1765;                      % Tube length [m] 
+% L = 1;
 N = floor(L/h);             % Tube length [samples]
 h = L / N;
-
+d = (c*sqrt(N))/fs;
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
 
@@ -83,8 +85,8 @@ for n = 1:dur
     uPrev = u;
     u = uNext;
 end
-
-soundsc(out, fs);
+% y = downsample(out,10);
+% soundsc(out, fs);
 
 %Plotting Output
 freqScaling = fs/dur;
