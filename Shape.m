@@ -11,10 +11,12 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
 %
 %     [maxWidth] determines width of the tube in the open end of the tube 
 % 
-%     [shapeType] 'linear' or 'exp' changes the type of curve after
-%                  curveStartPos 
-%                 'flat' creates a flat tube of amplitude minWidth. Ignores
-%                 curveStartPos and maxWidth
+%     [shapeType] - 'linear' or 'exp' changes the type of curve after
+%                    curveStartPos 
+%                 - 'flat' creates a flat tube of amplitude minWidth. Ignores
+%                   curveStartPos and maxWidth
+%                 - 'a', 'e', 'i', 'o', 'u' vowels shapes. Ignores 
+%                   curveStartPos
 % 
 %     example:
 % 

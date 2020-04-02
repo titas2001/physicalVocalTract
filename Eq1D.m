@@ -8,31 +8,32 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'a';
+shapeType = 'i';
 
-%Damp coefficient
+%Damp coefficient (not used yet)
 beta = 0.3;
 
-fs = 44100;         % sample rate
-k = 1 / fs;         % time step
-dur = 3*fs;           % duration
+fs = 44100;                 % sample rate
+k = 1 / fs;                 % time step [s]
+dur = 3*fs;                 % duration [samples]
 
 % Define speed of sound
-c = 344;
+c = 344;                    %[m/s]
+
 % Air density at 15°C, 1 atm
-ro = 1.115; 
+rho = 1.115; 
 
 % Calculate grid spacing from variables
 h = c * k;
-L = 1;
-N = floor(L/h); %length of the tube
-%h = L / N;
+L = 1;                      % Tube length [m] 
+N = floor(L/h);             % Tube length [samples]
+h = L / N;
 
 % Calculate courant number
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exticerFreq = 100;
+exticerFreq = 50;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -41,9 +42,9 @@ u = zeros(N, 1);
 % Exiciting with impulse at closed end
 % (Impulse response)
 if IR
-    %u(2) = 1; 
-    width = floor(N/10);
-    u(1:width) = hann(width); %More physical impulse
+    %u(2) = 1;              % raw impulse
+    width = floor(N/10);    % hann impulse 
+    u(1:width) = hann(width);
 end
 
 % Initialise spatial state u(n-1)
@@ -55,21 +56,21 @@ out = zeros(dur, 1);
 % Defining where output is observed, in our case the end of the tube
 outPos = N;
 
-%Shape function (*2 because we loor for the area, not sure about this
-%though)
+%Shape function (*2 because we look for the area, not sure about this)
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
+
+%Initializing exciter
 exciter = Impulso('sinepulse', exticerFreq, fs, dur, 45);
 
 for n = 1:dur
     if ~IR
-        %Multiplying by shape so it's not [-1,1] because it seems
-        %reasonable but maybe it's not
+        %TODO: change the way u is excited (Bilbao book)
        u(2) = exciter(n) * S(2)/2;
     end
     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5, 1);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-    out(n) = (ro*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    out(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
     %out(n) = uNext(outPos);
 
     %     % Real time states drawing

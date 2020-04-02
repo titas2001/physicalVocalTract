@@ -1,5 +1,6 @@
 %{
-TODO: check virtual grid points, especially for boundary conditions
+    TODO: check virtual grid points, especially for boundary conditions
+    NB: all equations except n°5 have wrong boundary conditions
 %}
 
 function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, number, bound)
@@ -17,7 +18,7 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S,
 %    0 --> Dirichlet (not working)
 %    1 --> Energy loss condition
 
-% radiation parameters
+% radiation parameters taken from Bilbao book
 %alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
 % bet = 0.7407/c/N;
 alf = L/(2*0.8216^2*c);
@@ -73,18 +74,18 @@ switch number
                 uNext(l) = 2 * u(l) - uPrev(l) + lambdaSq * (u(l+1) - 2 * u(l) + u(l-1));
              end
          end
-     case 5
-    % Wave processing shape from Bilbao book
+         
+     case 5  % Wave processing shape from Bilbao book
         for l = 1:N
              if l == 1 %Closed end: u(l-1) = u(l); S(l-1) = S(l)
-                A = S(l+1) + 3*S(l);
-                coeff = (2*lambdaSq/A);
-                uNext(l) = coeff*(S(l+1)+S(l))*u(l+1) + 2*(coeff*S(l) + 1-lambdaSq)*u(l) - uPrev(l); 
+                A = S(l+1) + 3*S(l);    % Common denominator (see written equations)
+                coeff = (2*lambdaSq/A); % Common coefficient (see written equations)
+                uNext(l) = coeff*(S(l+1)+S(l))*u(l+1) + 2*(coeff*S(l) + 1-lambdaSq)*u(l) - uPrev(l);
              elseif l == N %Open end
                     A = 3*S(l) + S(l-1);
                     coeff = (2*lambdaSq/A);
                     if bound == 0 %dirichlet condition
-                        uNext(l) = (2*coeff*S(l) + 2*(coeff*S(l) + 1-lambdaSq))*u(l) - uPrev(l); 
+                        uNext(l) = (2*coeff*S(l) + 2*(coeff*S(l) + 1-lambdaSq))*u(l) - uPrev(l);
                     elseif bound == 1 %loss condition
                         %backwards derivative
         %                     coeff1 = 2*k + 2*alf*h + k*bet*h;
@@ -92,12 +93,12 @@ switch number
         %                     boundTerm = (2*k/coeff1) * u(l-1) + (coeff2/coeff1)*uPrev(l);
         %                     uNext(l) = (coeff*(S(l+1)+S(l)) + 2*(coeff*S(l) + 1-lambdaSq))*boundTerm - uPrev(l);
                         %center derivative
-                        coeff1 = (alf*h + bet*h*k)/(2*k);
-                        coeff2 = (alf*h - bet*h*k)/(2*k);
-                        coeff3 = 1+2*S(l)*coeff*coeff1;
+                        coeff1 = (alf*h + bet*h*k)/(2*k); %I radiating coefficient
+                        coeff2 = (alf*h - bet*h*k)/(2*k); %II radiating coefficient
+                        coeff3 = 1+2*S(l)*coeff*coeff1;   %common denominator
                         uNext(l) = (2*coeff*S(l)/coeff3)*(u(l)+uPrev(l)*coeff2) + (coeff*(S(l)+S(l-1))*u(l-1) + 2*(1-lambdaSq)*u(l) - uPrev(l))/coeff3;
                     end
-             else
+             else   %Equation outside boundaries
                 A = S(l+1) + 2*S(l) + S(l-1);
                 coeff = (2*lambdaSq/A);
                 uNext(l) = coeff*(S(l+1)+S(l))*u(l+1) + coeff*(S(l)+S(l-1))*u(l-1) + 2*(1-lambdaSq)*u(l) - uPrev(l);
