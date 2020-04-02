@@ -69,7 +69,7 @@ for n = 1:dur
         %TODO: change the way u is excited (Bilbao book)
        u(2) = exciter(n) * S(2)/2;
     end
-    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5, 1);
+    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     out(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;

@@ -3,7 +3,7 @@
     NB: all equations except n°5 have wrong boundary conditions
 %}
 
-function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, number, bound)
+function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, number)
 % Wave Processing: runs selected update equation call function:
 % [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % choose equation with 'number':
@@ -13,10 +13,6 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S,
 %    3 --> Wave processing no damp shape function
 %    4 --> Wave processing no damp
 %    5 --> Wave processing shape from Bilbao book
-%
-% bound: bounding condition at open end (left)
-%    0 --> Dirichlet (not working)
-%    1 --> Energy loss condition
 
 % radiation parameters taken from Bilbao book
 %alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
