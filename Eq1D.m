@@ -86,7 +86,7 @@ for n = 1:dur
     u = uNext;
 end
 % y = downsample(out,10);
-% soundsc(out, fs);
+soundsc(out, fs);
 
 %Plotting Output
 freqScaling = fs/dur;

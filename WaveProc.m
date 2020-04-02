@@ -77,30 +77,16 @@ switch number
          
      case 5  % Wave processing shape from Bilbao book
         for l = 1:N
-             if l == 1 %Closed end: u(l-1) = u(l); S(l-1) = S(l)
-                A = S(l+1) + 3*S(l);    % Common denominator (see written equations)
-                coeff = (2*lambdaSq/A); % Common coefficient (see written equations)
-                uNext(l) = coeff*(S(l+1)+S(l))*u(l+1) + 2*(coeff*S(l) + 1-lambdaSq)*u(l) - uPrev(l);
-             elseif l == N %Open end
-                    A = 3*S(l) + S(l-1);
-                    coeff = (2*lambdaSq/A);
-                    if bound == 0 %dirichlet condition
-                        uNext(l) = (2*coeff*S(l) + 2*(coeff*S(l) + 1-lambdaSq))*u(l) - uPrev(l);
-                    elseif bound == 1 %loss condition
-                        %backwards derivative
-        %                     coeff1 = 2*k + 2*alf*h + k*bet*h;
-        %                     coeff2 = 2*alf*h - k*bet*h;
-        %                     boundTerm = (2*k/coeff1) * u(l-1) + (coeff2/coeff1)*uPrev(l);
-        %                     uNext(l) = (coeff*(S(l+1)+S(l)) + 2*(coeff*S(l) + 1-lambdaSq))*boundTerm - uPrev(l);
-                        %center derivative
-                        coeff1 = (alf*h + bet*h*k)/(2*k); %I radiating coefficient
-                        coeff2 = (alf*h - bet*h*k)/(2*k); %II radiating coefficient
-                        coeff3 = 1+2*S(l)*coeff*coeff1;   %common denominator
-                        uNext(l) = (2*coeff*S(l)/coeff3)*(u(l)+uPrev(l)*coeff2) + (coeff*(S(l)+S(l-1))*u(l-1) + 2*(1-lambdaSq)*u(l) - uPrev(l))/coeff3;
-                    end
+             if l == 1 %Closed end - Neumann condition: u(l-1) = u(l+1); S(l-1) = S(l+1)
+                uNext(l) = 2*lambdaSq*u(l+1) + 2*(1-lambdaSq)*u(l) - uPrev(l);
+             elseif l == N %Open end - loss condition
+                coeff1 = (alf*h + bet*h*k)/k; %I radiating coefficient
+                coeff2 = (alf*h - bet*h*k)/k; %II radiating coefficient
+                coeff3 = 1+lambdaSq*coeff1;   %common denominator
+                uNext(l) = (lambdaSq/coeff3)*(2*u(l-1)+uPrev(l)*coeff2) + (2*(1-lambdaSq)*u(l) - uPrev(l))/coeff3;
              else   %Equation outside boundaries
-                A = S(l+1) + 2*S(l) + S(l-1);
-                coeff = (2*lambdaSq/A);
+                A = S(l+1) + 2*S(l) + S(l-1); %This arises from the double mean of S (Bilbao pg 256)
+                coeff = (2*lambdaSq/A);       %Common coefficient
                 uNext(l) = coeff*(S(l+1)+S(l))*u(l+1) + coeff*(S(l)+S(l-1))*u(l-1) + 2*(1-lambdaSq)*u(l) - uPrev(l);
              end
         end
