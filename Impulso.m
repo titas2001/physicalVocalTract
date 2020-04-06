@@ -51,20 +51,21 @@ switch mode
         
     case 'camel'
         
-        t = 0.001:0.001:1;
+        t = freq/fs:freq/fs:1+freq/fs;
         e1 = 0.1;
         e2 = 0.4;
+        repeat = 3*freq;
         
         for i=1:length(t)
             if t(i)<e1
-               x(i) = 0.5-0.5*cos(2*pi*freq*t(i));
+               x(i) = 0.5-0.5*cos(2*pi*t(i));
             elseif t(i)<=e2
-               x(i) = -((0.5-0.5*cos(2*pi*freq*e1))/(e2-e1))*((t(i)-e2));
+               x(i) = -((0.5-0.5*cos(2*pi*e1))/(e2-e1))*((t(i)-e2));
             else
                x(i) = 0;
             end
         end
-         xx = repmat(x, [1, time]);
+         xx = repmat(x, [1, repeat]);
          imp = xx;
 
 end
