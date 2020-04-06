@@ -35,7 +35,7 @@ d = (c*sqrt(N))/fs;
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exticerFreq = 80;           % [Hz]
+exciterFreq = 80;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -62,7 +62,7 @@ outPos = N;
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 %Initializing exciter
-exciter = Impulso('sinepulse', exticerFreq, fs, dur, 45);
+exciter = Impulso('camel', exciterFreq, fs, dur, 45);
 
 for n = 1:dur
     if ~IR
