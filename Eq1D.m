@@ -61,13 +61,9 @@ outPos = N;
 %Shape function (*2 because we look for the area, not sure about this)
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
-%Initializing exciter
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
 
 for n = 1:dur
-    if ~IR
-       %u(1) = exciter(n) * S(2)/2;
-    end
     
     %TODO: Bilbao does this, have to understand why
     excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
@@ -96,7 +92,7 @@ i = 1:floor(length(out)/sFactor);
 nOut = out(i)/mVal;    % normalized Output
 
 nOut = lowpass(nOut, 0.0119*sFactor);
-% soundsc(out, fs/sFactor);
+%soundsc(out, fs/sFactor);
 
 %Plotting Output
 freqScaling = fs/dur;
