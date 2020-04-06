@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'a';
+shapeType = 'e';
 
 %Damp coefficient (not used yet)
 beta = 0.3;
@@ -35,7 +35,7 @@ d = (c*sqrt(N))/fs;
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exticerFreq = 50;           % [Hz]
+exticerFreq = 80;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -86,6 +86,7 @@ for n = 1:dur
     u = uNext;
 end
 % y = downsample(out,10);
+out = lowpass(out, 0.0119);
 soundsc(out, fs);
 
 %Plotting Output
