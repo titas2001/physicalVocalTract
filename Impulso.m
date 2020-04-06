@@ -65,7 +65,10 @@ switch mode
                x(i) = 0;
             end
         end
+
          xx = repmat(x, [1, repeat]);
-         imp = xx;
+         wit_noise = awgn(xx, -24, 'measured');
+         oioi = xx+0.0001*wit_noise;
+         imp = oioi;
 
 end
