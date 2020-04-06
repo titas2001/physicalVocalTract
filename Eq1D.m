@@ -62,31 +62,34 @@ outPos = N;
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 %Initializing exciter
-exciter = Impulso('camel', exciterFreq, fs, dur, 45);
+exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
 
 for n = 1:dur
     if ~IR
-        %TODO: change the way u is excited (Bilbao book)
-       u(2) = exciter(n) * S(2)/2;
+       %u(1) = exciter(n) * S(2)/2;
     end
-    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5);
+    
+    %TODO: Bilbao does this, have to understand why
+    excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
+    %excit = exciterSign(n);
+    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, excit, IR, 5);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     out(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
     %out(n) = uNext(outPos);
 
-    %     % Real time states drawing
-%         plot(uNext);
-%         %plot(exiciter);
-%         ylim([-0.01, 0.01]);
-%         drawnow;
+%     % Real time states drawing
+%     plot(uNext);
+%     %plot(exiciter);
+%     ylim([-0.01, 0.01]);
+%     drawnow;
     
     % Update spatial states
     uPrev = u;
     u = uNext;
 end
 % y = downsample(out,10);
-out = lowpass(out, 0.0119);
+%out = lowpass(out, 0.0119);
 soundsc(out, fs);
 
 %Plotting Output
@@ -111,5 +114,5 @@ hold on
 plot(-S/2);
 title('Shape')
 
-% figure(2)
-% plot(exciter)
+figure(2)
+plot(exciterSign)

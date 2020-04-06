@@ -3,7 +3,7 @@
     NB: all equations except n°5 have wrong boundary conditions
 %}
 
-function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, number)
+function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, exciter, IR, number)
 % Wave Processing: runs selected update equation call function:
 % [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % choose equation with 'number':
@@ -13,6 +13,9 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S,
 %    3 --> Wave processing no damp shape function
 %    4 --> Wave processing no damp
 %    5 --> Wave processing shape from Bilbao book
+%
+%exciter: single value, exciter signal
+%IR: if !=0 bypasses exciter signal and excitates with impulse
 
 % radiation parameters taken from Bilbao book
 %alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
@@ -74,7 +77,12 @@ switch number
      case 5  % Wave processing shape from Bilbao book
         for l = 1:N
              if l == 1 %Closed end - Neumann condition: u(l-1) = u(l+1); S(l-1) = S(l+1)
-                uNext(l) = 2*lambdaSq*u(l+1) + 2*(1-lambdaSq)*u(l) - uPrev(l);
+                if (~IR)
+                    shapeCoeff = (3*S(l) - S(l+1))/(2*S(l));
+                    uNext(l) = 2*(1-lambdaSq)*u(l) - uPrev(l) + 2*lambdaSq * u(l+1) + (c^2*k^2/h)*exciter*shapeCoeff;
+                else
+                    uNext(l) = 2*lambdaSq*u(l+1) + 2*(1-lambdaSq)*u(l) - uPrev(l);
+                end
              elseif l == N %Open end - loss condition
                 coeff1 = (alf*h + bet*h*k)/k; %I radiating coefficient
                 coeff2 = (alf*h - bet*h*k)/k; %II radiating coefficient
