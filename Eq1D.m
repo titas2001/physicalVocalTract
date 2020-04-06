@@ -17,7 +17,7 @@ beta = 0.3;
 fs = 157870;                 % sample rate
 k = 1 / fs;                 % time step [s]
 dur = 3*fs;                 % duration [samples]
-
+sFactor = 10;               % scaling factor used to downsample before playback and plotting
 % Define speed of sound
 c = 344;                    %[m/s]
 
@@ -72,7 +72,9 @@ for n = 1:dur
     [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, 5);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-    out(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    if mod(n, sFactor) == 0
+        out(floor(n/sFactor)) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    end
     %out(n) = uNext(outPos);
 
     %     % Real time states drawing
@@ -85,24 +87,28 @@ for n = 1:dur
     uPrev = u;
     u = uNext;
 end
-% y = downsample(out,10);
-out = lowpass(out, 0.0119);
-soundsc(out, fs);
+% Normalizing output
+mVal = max(out);    % find max value of output
+i = 1:floor(length(out)/sFactor);
+nOut = out(i)/mVal;    % normalized Output
+
+nOut = lowpass(nOut, 0.0119*sFactor);
+% soundsc(out, fs/sFactor);
 
 %Plotting Output
 freqScaling = fs/dur;
 freqAxis = freqScaling:freqScaling:(freqScaling*dur);
-transform = abs(fft(out));
+transform = abs(fft(nOut));
 figure(1)
 tiledlayout(3,1)
 % Top plot
 nexttile
-plot(out)
+plot(nOut)
 title('Time')
 xlabel('samples')
 % Bottom plot
 nexttile
-plot(freqAxis(1:66150),transform(1:66150))
+plot(freqAxis(1:(66150/sFactor)),transform(1:(66150/sFactor)))
 title('Freq')
 xlabel('Hz')
 nexttile
