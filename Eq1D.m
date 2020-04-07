@@ -29,7 +29,7 @@ playbackDur = Fs*durSec;
 sFactor = fs/Fs;            
 
 % Define speed of sound
-c = 344;                    %[m/s]
+c = 353.8;                    %[m/s]
 
 % Air density at 15°C, 1 atm
 rho = 1.115; 
