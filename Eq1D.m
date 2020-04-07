@@ -36,7 +36,8 @@ rho = 1.115;
 
 % Calculate grid spacing from variables
 h = c * k;
-L = 0.1765;                      % Tube length [m] 
+% L = 0.1765;                      % Tube length [m] 
+L = 0.160891;
 % L = 1;
 N = floor(L/h);             % Tube length [samples]
 h = L / N;
@@ -45,7 +46,7 @@ d = (c*sqrt(N))/fs;
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exciterFreq = 80;           % [Hz]
+exciterFreq = 100;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
