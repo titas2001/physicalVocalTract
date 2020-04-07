@@ -37,7 +37,7 @@ rho = 1.115;
 % Calculate grid spacing from variables
 h = c * k;
 % L = 0.1765;                      % Tube length [m] 
-L = 0.160891;
+L = 0.165475;
 % L = 1;
 N = floor(L/h);             % Tube length [samples]
 h = L / N;
@@ -106,7 +106,7 @@ out = out/mVal;
 
 %nOut = lowpass(nOut, 0.0119*sFactor);
 nOut = lowpass(out, 0.0119*sFactor);
-soundsc(nOut, Fs);
+% soundsc(nOut, Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
