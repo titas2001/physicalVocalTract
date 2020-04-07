@@ -8,20 +8,30 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'e';
+shapeType = 'a';
 
 %Damp coefficient (not used yet)
 beta = 0.3;
 
-% fs = 44100;                 % sample rate
-fs = 157870;                 % sample rate
+%fs = 44100;                % time grid sample rate
+%fs = 157870;               % time grid sample rate
+fs = 480e3;                 % time grid sample rate
+Fs = 48e3;                  % playback sample rate
 k = 1 / fs;                 % time step [s]
-dur = 3*fs;                 % duration [samples]
-sFactor = 10;               % scaling factor used to downsample before playback and plotting
+durSec = 3;                 % duration in seconds
+dur = durSec*fs;                 % duration [samples]
+playbackDur = Fs*durSec;
+
+%{ 
+    scaling factor used to downsample before playback and plotting
+    it has to be an integer!
+%}
+sFactor = fs/Fs;            
+
 % Define speed of sound
 c = 344;                    %[m/s]
 
-% Air density at 15ï¿½C, 1 atm
+% Air density at 15°C, 1 atm
 rho = 1.115; 
 
 % Calculate grid spacing from variables
@@ -53,7 +63,7 @@ end
 uPrev = u;
 
 % Initialise output vector
-out = zeros(dur, 1);
+out = zeros(playbackDur, 1);
 
 % Defining where output is observed, in our case the end of the tube
 outPos = N;
@@ -62,7 +72,7 @@ outPos = N;
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
-
+counter = 1;
 for n = 1:dur
     
     %TODO: Bilbao does this, have to understand why
@@ -72,7 +82,8 @@ for n = 1:dur
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     if mod(n, sFactor) == 0
-        out(floor(n/sFactor)) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+        out(counter) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+        counter = counter + 1;
     end
     %out(n) = uNext(outPos);
 
@@ -88,15 +99,17 @@ for n = 1:dur
 end
 % Normalizing output
 mVal = max(out);    % find max value of output
-i = 1:floor(length(out)/sFactor);
-nOut = out(i)/mVal;    % normalized Output
+% i = 1:floor(length(out)/sFactor);
+% nOut = out(i)/mVal;    % normalized Output
+out = out/mVal;
 
-nOut = lowpass(nOut, 0.0119*sFactor);
-%soundsc(out, fs/sFactor);
+%nOut = lowpass(nOut, 0.0119*sFactor);
+nOut = lowpass(out, 0.0119*sFactor);
+soundsc(nOut, Fs);
 
 %Plotting Output
-freqScaling = fs/dur;
-freqAxis = freqScaling:freqScaling:(freqScaling*dur);
+freqScaling = Fs/playbackDur;
+freqAxis = freqScaling:freqScaling:(freqScaling*playbackDur);
 transform = abs(fft(nOut));
 figure(1)
 tiledlayout(3,1)
@@ -107,7 +120,7 @@ title('Time')
 xlabel('samples')
 % Bottom plot
 nexttile
-plot(freqAxis(1:(66150/sFactor)),transform(1:(66150/sFactor)))
+plot(freqAxis(1:(66150)),transform(1:(66150)))
 title('Freq')
 xlabel('Hz')
 nexttile
