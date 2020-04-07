@@ -28,7 +28,7 @@ playbackDur = Fs*durSec;
 %}
 sFactor = fs/Fs;            
 
-% Define speed of sound
+% Define speed of sound: c~331.6+0.6*T
 c = 353.8;                    %[m/s]
 
 % Air density at 15°C, 1 atm
