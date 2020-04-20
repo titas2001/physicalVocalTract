@@ -52,6 +52,10 @@ exciterFreq = 100;           % [Hz]
 uNext = zeros(N, 1);
 u = zeros(N, 1);
 
+wNext = zeros(N, 1);
+w = zeros(N, 1);
+wPrev = zeros(N, 1);
+
 % Exiciting with impulse at closed end
 % (Impulse response)
 if IR
@@ -79,7 +83,7 @@ for n = 1:dur
     %TODO: Bilbao does this, have to understand why
     excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
     %excit = exciterSign(n);
-    [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, h, N, L, c, S, excit, IR, 5);
+    [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, excit, IR, 6);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     if mod(n, sFactor) == 0
@@ -106,7 +110,7 @@ out = out/mVal;
 
 %nOut = lowpass(nOut, 0.0119*sFactor);
 nOut = lowpass(out, 0.0119*sFactor);
-% soundsc(nOut, Fs);
+soundsc(nOut, Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
