@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'aA';
+shapeType = 'uA';
 
 %Damp coefficient (not used yet)
 beta = 0.3;

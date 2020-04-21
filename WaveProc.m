@@ -102,34 +102,40 @@ switch number
         for l = 1:N
             f0 = 80;
             Z = wPrev(l)*(beta*k-1) + w(l)*(1-k^2*f0^2) - k*eps*(S(l)^(1/4))*uPrev(l)/2;
-            MAT1 = [- k*eps*(S(l)^(1/4))/2, 1+k*beta];
+            mat11 = - k*eps*(S(l)^(1/4))/2;
+            mat12 =  1+k*beta;
              if l == 1 %Closed end - Neumann condition: u(l-1) = u(l+1); S(l-1) = S(l+1)
                 if (~IR)
                     shapeCoeff = (3*S(l) - S(l+1))/(2*S(l));
                     Q = 2*(1-lambdaSq)*u(l) - uPrev(l) + 2*lambdaSq * u(l+1) + (c^2*k^2/h)*exciter*shapeCoeff + eps*(S(l)^(1/4))*wPrev(l)/2;
-                    MAT2 = [1, k*eps*(S(l)^(1/4))/2];
+                    mat21 = 1;
+                    mat22 = k*eps*(S(l)^(1/4))/2;
                 else
                     Q = 2*lambdaSq*u(l+1) + 2*(1-lambdaSq)*u(l) - uPrev(l) + k*eps*(S(l)^(1/4))*wPrev(l)/(4*(S(l)+S(l+1)));
-                    MAT2 = [1, k*eps*(S(l)^(1/4))/(4*(S(l)+S(l+1)))];
+                    mat21 = 1;
+                    mat22 = k*eps*(S(l)^(1/4))/(4*(S(l)+S(l+1)));
                 end
              elseif l == N %Open end - loss condition
                 coeff1 = (alf*h + bet*h*k)/k; %I radiating coefficient
                 coeff2 = (alf*h - bet*h*k)/k; %II radiating coefficient
                 coeff3 = 1+lambdaSq*coeff1;   %common denominator
                 Q = lambdaSq*(2*u(l-1)+uPrev(l)*coeff2) + 2*(1-lambdaSq)*u(l) - uPrev(l) - eps*k*wPrev(l)*(S(l)^(1/4))/(4*S(l-1)+4*S(l));
-                MAT2 = [coeff3, eps*k*(S(l)^(1/4))/(4*S(l-1)+4*S(l))];
+                mat21 = coeff3;
+                mat22 = eps*k*(S(l)^(1/4))/(4*S(l-1)+4*S(l));
              else   %Equation outside boundaries
                 A = S(l+1) + 2*S(l) + S(l-1); %This arises from the double mean of S (Bilbao pg 256)
                 coeff = (2*lambdaSq/A);       %Common coefficient
                 Q = coeff*(S(l+1)+S(l))*u(l+1) + coeff*(S(l)+S(l-1))*u(l-1) + 2*(1-lambdaSq)*u(l) - uPrev(l) + k*eps*wPrev(l)*(S(l)^(1/4))/(2*A);
-                MAT2 = [1, k*eps*(S(l)^(1/4))/(2*A)];
+                mat21 = 1;
+                mat22 = k*eps*(S(l)^(1/4))/(2*A);
              end
-             MAT = [MAT1; MAT2];
-             MATinv = inv(MAT);
-             paramVec = [Z; Q];
-             resVec = MATinv*paramVec;
-             uNext(l) = resVec(1);
-             wNext(l) = resVec(2);
+             %Cramer rule for 2 equations systems
+             detMat = mat11*mat22 - mat12*mat21;
+             detMatPsi = Z*mat22 - mat12*Q;
+             detMatW = mat11*Q - Z*mat21;
+
+             uNext(l) = detMatPsi/detMat;
+             wNext(l) = detMatW/detMat;
         end
 end
 
