@@ -24,6 +24,7 @@ alf = L/(2*0.8216^2*c);
 bet = L/(0.8216*sqrt(S(1)*S(2)/pi));
 
 M = 0.01;
+f0 = 80;
 eps = c*sqrt(2*rho/M)*(pi/S(1))^(1/4);
 
 switch number
@@ -100,7 +101,6 @@ switch number
         
      case 6  % Wave processing shape from Bilbao book damp
         for l = 1:N
-            f0 = 80;
             Z = wPrev(l)*(beta*k-1) + w(l)*(1-k^2*f0^2) - k*eps*(S(l)^(1/4))*uPrev(l)/2;
             mat11 = - k*eps*(S(l)^(1/4))/2;
             mat12 =  1+k*beta;
