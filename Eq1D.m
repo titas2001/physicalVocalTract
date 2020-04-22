@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'uA';
+shapeType = 'iB';
 
 %Damp coefficient (not used yet)
 beta = 0.3;
@@ -103,14 +103,21 @@ for n = 1:dur
     u = uNext;
 end
 % Normalizing output
-mVal = max(out);    % find max value of output
+maxOut = max(out);    % find max value of output
+minOut = abs(min(out));
+if maxOut>minOut
+    out = out/maxOut;
+else
+    out = out/minOut;
+end
 % i = 1:floor(length(out)/sFactor);
 % nOut = out(i)/mVal;    % normalized Output
-out = out/mVal;
 
-%nOut = lowpass(nOut, 0.0119*sFactor);
 nOut = lowpass(out, 0.0119*sFactor);
-soundsc(nOut, Fs);
+
+sound(nOut, Fs);
+
+audiowrite("britishI.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
