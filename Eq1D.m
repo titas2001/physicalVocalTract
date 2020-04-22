@@ -117,7 +117,7 @@ nOut = lowpass(out, 0.0119*sFactor);
 
 sound(nOut, Fs);
 
-audiowrite("britishI.wav",nOut,Fs);
+%audiowrite("britishI.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
