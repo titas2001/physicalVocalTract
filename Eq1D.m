@@ -75,6 +75,7 @@ uPrev = u;
 
 % Initialise output vector
 out = zeros(playbackDur, 1);
+outUpSample = zeros(fs*durSec,1);
 
 % Defining where output is observed, in our case the end of the tube
 outPos = N;
@@ -83,12 +84,9 @@ outPos = N;
 S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
-counter = 1;
 
 fil = VT_Filter;
 numnum = fil.Numerator;
-
-VT_fil = filter(numnum, 1, exciterSign);
 
 for n = 1:dur
     
@@ -96,13 +94,16 @@ for n = 1:dur
     excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
     %excit = exciterSign(n);
     [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, excit, IR, 6);
-     
-    % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-    if mod(n, sFactor) == 0
-        out(counter) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
-        counter = counter + 1;
-    end
-    %out(n) = uNext(outPos);
+    
+    %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
+    outUpSample(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    
+% %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
+%     if mod(n, sFactor) == 0
+%         out(counter) = VT_fil(n);
+%         counter = counter + 1;
+%     end
+%     %out(n) = uNext(outPos);
 
 %     % Real time states drawing
 %     plot(uNext);
@@ -114,6 +115,17 @@ for n = 1:dur
     uPrev = u;
     u = uNext;
 end
+
+VT_fil = filter(numnum, 1, outUpSample);
+counter = 1;
+for i=1:size(outUpSample)
+    %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
+    if mod(i, sFactor) == 0
+        out(counter) = VT_fil(i);
+        counter = counter + 1;
+    end
+end
+
 % Normalizing output
 maxOut = max(out);    % find max value of output
 minOut = abs(min(out));
@@ -125,8 +137,8 @@ end
 % i = 1:floor(length(out)/sFactor);
 % nOut = out(i)/mVal;    % normalized Output
 
-nOut = lowpass(out, 0.0119*sFactor);
-%nOut = out;
+%nOut = lowpass(out, 0.0119*sFactor);
+nOut = out;
 sound(nOut, Fs);
 
 %audiowrite("britishUNewValues3.wav",nOut,Fs);
