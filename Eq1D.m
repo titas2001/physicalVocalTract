@@ -84,6 +84,12 @@ S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
 counter = 1;
+
+fil = VT_Filter;
+numnum = fil.Numerator;
+
+VT_fil = filter(numnum, 1, exciterSign);
+
 for n = 1:dur
     
     %TODO: Bilbao does this, have to understand why
