@@ -3,7 +3,7 @@
     NB: all equations except n°5 have wrong boundary conditions
 %}
 
-function [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, exciter, IR, number)
+function [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, exciter, IR, number)
 % Wave Processing: runs selected update equation call function:
 % [u,uNext] = WaveProc(uNext, u, uPrev, lambdaSq, beta, k, N, S, number)
 % choose equation with 'number':
@@ -23,8 +23,6 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, 
 alf = L/(2*0.8216^2*c);
 bet = L/(0.8216*sqrt(S(1)*S(2)/pi));
 
-M = 0.01;
-f0 = 80;
 eps = c*sqrt(2*rho/M)*(pi/S(1))^(1/4);
 
 switch number

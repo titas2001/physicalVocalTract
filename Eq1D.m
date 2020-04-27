@@ -8,10 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'iB';
-
-%Damp coefficient (not used yet)
-beta = 0.3;
+shapeType = 'uB';
 
 %fs = 44100;                % time grid sample rate
 %fs = 157870;               % time grid sample rate
@@ -28,11 +25,20 @@ playbackDur = Fs*durSec;
 %}
 sFactor = fs/Fs;            
 
-% Define speed of sound: c~331.6+0.6*T
+
+%Damp coefficient
+beta = 8125;
+
+% Define speed of sound - Assume 37°C c~331.6+0.6*T
 c = 353.8;                    %[m/s]
 
-% Air density at 15°C, 1 atm
-rho = 1.115; 
+% Air density at 37°C, 1 atm
+rho = 1.138; 
+
+%Mass per unit length given epsilon value from Bilbao
+M = 0.01; %0.3947;
+%resonant frequency, from Bilbao
+f0 = 0;
 
 % Calculate grid spacing from variables
 h = c * k;
@@ -83,7 +89,7 @@ for n = 1:dur
     %TODO: Bilbao does this, have to understand why
     excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
     %excit = exciterSign(n);
-    [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, excit, IR, 6);
+    [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, excit, IR, 6);
      
     % Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     if mod(n, sFactor) == 0
@@ -114,10 +120,10 @@ end
 % nOut = out(i)/mVal;    % normalized Output
 
 nOut = lowpass(out, 0.0119*sFactor);
-
+%nOut = out;
 sound(nOut, Fs);
 
-%audiowrite("britishI.wav",nOut,Fs);
+%audiowrite("britishUNewValues3.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
