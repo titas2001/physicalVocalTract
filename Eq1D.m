@@ -37,6 +37,7 @@ rho = 1.138;
 
 %Mass per unit length given epsilon value from Bilbao
 M = 0.01; %0.3947;
+%M=4;
 %resonant frequency, from Bilbao
 f0 = 0;
 
@@ -52,7 +53,7 @@ d = (c*sqrt(N))/fs;
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exciterFreq = 100;           % [Hz]
+exciterFreq = 120;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -85,7 +86,7 @@ S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
 
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
 
-fil = VT_Filter;
+fil = VT_Filter(fs, 16000, 20000);
 numnum = fil.Numerator;
 
 for n = 1:dur
@@ -141,7 +142,7 @@ end
 nOut = out;
 sound(nOut, Fs);
 
-%audiowrite("britishUNewValues3.wav",nOut,Fs);
+%audiowrite("britishUFilter.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
