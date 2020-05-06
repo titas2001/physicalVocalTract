@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'uB';
+shapeType = 'aF';
 
 %fs = 44100;                % time grid sample rate
 %fs = 157870;               % time grid sample rate
