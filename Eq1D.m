@@ -38,13 +38,25 @@ rho = 1.138;
 %Mass per unit length given epsilon value from Bilbao
 M = 0.01; %0.3947;
 %M=4;
+M = 0.012; %0.3947;
 %resonant frequency, from Bilbao
 f0 = 0;
 
 % Calculate grid spacing from variables
 h = c * k;
 % L = 0.1765;                      % Tube length [m] 
-L = 0.165475;
+% L = 0.165475;
+
+if shapeType == 'uF'
+    L = 0.195;
+elseif shapeType == 'uA'
+    L = 0.195;
+elseif shapeType == 'uB'
+    L = 0.195;
+else
+    L = 0.165475;
+end
+
 % L = 1;
 N = floor(L/h);             % Tube length [samples]
 h = L / N;
@@ -142,7 +154,7 @@ end
 nOut = out;
 sound(nOut, Fs);
 
-%audiowrite("britishUFilter.wav",nOut,Fs);
+%audiowrite("French_U_16_5.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
