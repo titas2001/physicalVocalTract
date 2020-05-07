@@ -39,7 +39,12 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     aJapaneseArray = [12 12 26 16 12 14 20 26 30 34 38 38 34 30 28 32];
     oJapaneseArray = [12 12 30 22 16 14 16 22 28 34 38 38 32 26 22 14];
     uJapaneseArray = [12 12 30 30 30 30 26 18 14 22 26 24 22 20 14 16];
-    
+    %calculate area funcion in cm2
+    iJapaneseArray = (iJapaneseArray/20).^2*pi;
+    eJapaneseArray = (eJapaneseArray/20).^2*pi;
+    aJapaneseArray = (aJapaneseArray/20).^2*pi;
+    oJapaneseArray = (oJapaneseArray/20).^2*pi;
+    uJapaneseArray = (uJapaneseArray/20).^2*pi;
     %~~~~~~~~~~~~~~~~American~Vowels~in~cm2~~~~~~~~~~~~~~~~~~~~~~
     aAmericanArray  = [1.56 3.10 3.74 2.48 1.28 0.60 0.73 1.28 1.39 1.31 1.43 1.90 3.22 4.44 4.83 3.89 4.72 2.03 2.49 2.82];
     aeAmericanArray = [1.91 2.69 4.53 2.05 1.33 1.44 2.82 4.54 4.04 3.24 2.82 3.20 4.32 5.13 4.17 4.98 6.31 5.65 7.03];
@@ -54,7 +59,7 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     % Analysis of vocal tract shape and dimensions using magnetic
     % resonance imaging: Vowels 
     % by T. Baer,J.C. Gore, L.C. Gracco and P.W. Nye 
-    %~~~~~~~~~~~~~~~~French~Vowels~in~cm~~~~~~~~~~~~~~~~~~~~~~
+    %~~~~~~~~~~~~~~~~French~Vowels~in~cm2~~~~~~~~~~~~~~~~~~~~~~
     aFrenchArray = [1.8 1.8 2.8 1.5 0.8 1.3 1.5 1.7 2.8 4.5 7.1 9.3 13.5 15.5 7.8];
     iFrenchArray = [3.0 3.7 4.5 6.6 9.3 10.3 9.4 7.5 4.5 1.4 0.6 0.4 0.3 2.2];
     uFrenchArray = [1.4 3.4 6.6 8.7 9.8 9.2 7.6 5.8 4.4 2.3 0.7 1.5 3.9 8.6 6.9 1.5 1.3];
@@ -99,45 +104,45 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     if shapeType  == "iJ" % a Japanese
         leftover = N-floor(N/16)*16;
         for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = iJapaneseArray(i)*0.001;
+            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = iJapaneseArray(i);
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = iJapaneseArray(16)*0.001;
+        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = iJapaneseArray(16);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "eJ"
         leftover = N-floor(N/16)*16;
         for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = eJapaneseArray(i)*0.001;
+            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = eJapaneseArray(i);
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = eJapaneseArray(16)*0.001;
+        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = eJapaneseArray(16);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "aJ"
         leftover = N-floor(N/16)*16;
         for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = aJapaneseArray(i)*0.001;
+            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = aJapaneseArray(i);
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = aJapaneseArray(16)*0.001;
+        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = aJapaneseArray(16);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "oJ"
         leftover = N-floor(N/16)*16;
         for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = oJapaneseArray(i)*0.001;
+            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = oJapaneseArray(i);
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = oJapaneseArray(16)*0.001;
+        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = oJapaneseArray(16);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "uJ"
         leftover = N-floor(N/16)*16;
         for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = uJapaneseArray(i)*0.001;
+            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = uJapaneseArray(i);
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = uJapaneseArray(16)*0.001;
+        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = uJapaneseArray(16);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -152,9 +157,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(aAmericanArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aAmericanArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aAmericanArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aAmericanArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aAmericanArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -162,9 +167,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(aeAmericanArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aeAmericanArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aeAmericanArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aeAmericanArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aeAmericanArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -172,9 +177,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(iAmericanArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iAmericanArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iAmericanArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iAmericanArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iAmericanArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -182,9 +187,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(uAmericanArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uAmericanArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uAmericanArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uAmericanArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uAmericanArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -198,9 +203,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(aBritishArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aBritishArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aBritishArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aBritishArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aBritishArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -208,9 +213,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(aeBritishArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aeBritishArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aeBritishArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aeBritishArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aeBritishArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -218,9 +223,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(iBritishArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iBritishArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iBritishArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iBritishArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iBritishArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -228,9 +233,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(uBritishArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uBritishArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uBritishArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uBritishArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uBritishArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -243,9 +248,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(aFrenchArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aFrenchArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aFrenchArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aFrenchArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aFrenchArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -253,9 +258,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(iFrenchArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iFrenchArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iFrenchArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iFrenchArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iFrenchArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
@@ -263,9 +268,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
         L = length(uFrenchArray);
         leftover = N-floor(N/L)*L;
         for i = 1:L
-            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uFrenchArray(i)*0.01;
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uFrenchArray(i);
         end
-        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uFrenchArray(L)*0.01;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uFrenchArray(L);
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
