@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'aF';
+shapeType = 'aeB';
 
 %fs = 44100;                % time grid sample rate
 %fs = 157870;               % time grid sample rate
@@ -47,11 +47,7 @@ h = c * k;
 % L = 0.1765;                      % Tube length [m] 
 % L = 0.165475;
 
-if shapeType == 'uF'
-    L = 0.195;
-elseif shapeType == 'uA'
-    L = 0.195;
-elseif shapeType == 'uB'
+if shapeType(1) == 'u'
     L = 0.195;
 else
     L = 0.165475;
@@ -109,7 +105,8 @@ for n = 1:dur
     [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, excit, IR, 6);
     
     %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-    outUpSample(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    %outUpSample(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
+    outUpSample(n) = rho*(uNext(outPos) - u(outPos)) / k;
     
 % %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
 %     if mod(n, sFactor) == 0
