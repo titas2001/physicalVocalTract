@@ -38,7 +38,7 @@ rho = 1.138;
 %Mass per unit length given epsilon value from Bilbao
 M = 0.01; %0.3947;
 %M=4;
-M = 0.012; %0.3947;
+
 %resonant frequency, from Bilbao
 f0 = 0;
 
