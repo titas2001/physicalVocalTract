@@ -20,7 +20,7 @@ function [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, 
 % radiation parameters taken from Bilbao book
 %alf = 2.0881*N*sqrt(1/(S(1)*S(N)));
 % bet = 0.7407/c/N;
-alf = L/(2*0.8216^2*c);
+alf = 1/(2*0.8216^2*c);
 bet = L/(0.8216*sqrt(S(1)*S(2)/pi));
 
 eps = c*sqrt(2*rho/M)*(pi/S(1))^(1/4);
