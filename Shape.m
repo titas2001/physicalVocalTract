@@ -23,7 +23,9 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
 %     Shape(N,0.5,0.5, 4, 'linear') will get function with linear curve with max
 %     value 4 and the curve will start at halfway point of N
 %
-    scaleFromCM2 = 1;
+    %scaleFromCM2 = 1;
+    scaleFromCM2 = 0.01;
+
     % check if inputs are valid
     if floor(N) ~= ceil(N) || N<0
         error('N has to be a positive integer');

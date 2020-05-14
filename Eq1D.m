@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'aeB';
+shapeType = 'uB';
 
 %fs = 44100;                % time grid sample rate
 %fs = 157870;               % time grid sample rate
@@ -36,7 +36,9 @@ c = 353.8;                    %[m/s]
 rho = 1.138; 
 
 %Mass per unit length given epsilon value from Bilbao
-M = 0.01; %0.3947;
+M = 0.01;
+%M=0.3947;
+%M=0.04;
 %M=4;
 
 %resonant frequency, from Bilbao
@@ -90,7 +92,7 @@ outUpSample = zeros(fs*durSec,1);
 outPos = N;
 
 %Shape function (*2 because we look for the area, not sure about this)
-S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType)*2;
+S = Shape(N+1, curveStartPos, minWidth, maxWidth, shapeType);
 
 exciterSign = Impulso('camel', exciterFreq, fs, dur, 45);
 
@@ -149,9 +151,9 @@ end
 
 %nOut = lowpass(out, 0.0119*sFactor);
 nOut = out;
-sound(nOut, Fs);
+%sound(nOut, Fs);
 
-%audiowrite("French_U_16_5.wav",nOut,Fs);
+audiowrite("BritishUM001S001.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
