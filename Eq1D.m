@@ -36,10 +36,10 @@ c = 353.8;                    %[m/s]
 rho = 1.138; 
 
 %Mass per unit length given epsilon value from Bilbao
-M = 0.01;
+%M = 0.01;
 %M=0.3947;
 %M=0.04;
-%M=4;
+M=4;
 
 %resonant frequency, from Bilbao
 f0 = 0;
@@ -153,7 +153,7 @@ end
 nOut = out;
 %sound(nOut, Fs);
 
-audiowrite("BritishUM001S001.wav",nOut,Fs);
+audiowrite("BritishUM4S001New.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
