@@ -36,6 +36,12 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     if maxWidth <= 0
         error('maxWidth has to be a possitive number');
     end
+    
+    aJapanese2Array = [34 20 12 14 16 20 26 30 34 38 34 30 26 32];
+    eJapanese2Array = [30 30 30 30 28 26 22 20 16 16 16 20 18 24];
+    iJapanese2Array = [30 30 30 30 30 30 22 14 10 8 8 8 12 22];
+    oJapanese2Array = [26 20 16 14 16 22 28 34 38 34 34 26 22 16];
+    uJapanese2Array = [26 26 26 26 24 16 12 16 22 22 20 18 14 14];
     %~~~~~~~~~~~~~~~~Japanese~Vowels~in~mm~~~~~~~~~~~~~~~~~~~~~~
     iJapaneseArray = [12 12 32 32 32 32 32 32 24 16 10 10 10 12 14 24];
     eJapaneseArray = [12 12 30 30 30 30 28 24 18 16 16 18 20 22 22 24];
@@ -43,11 +49,11 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     oJapaneseArray = [12 12 30 22 16 14 16 22 28 34 38 38 32 26 22 14];
     uJapaneseArray = [12 12 30 30 30 30 26 18 14 22 26 24 22 20 14 16];
     %calculate area funcion in cm2
-    iJapaneseArray = (iJapaneseArray/20).^2*pi;
-    eJapaneseArray = (eJapaneseArray/20).^2*pi;
-    aJapaneseArray = (aJapaneseArray/20).^2*pi;
-    oJapaneseArray = (oJapaneseArray/20).^2*pi;
-    uJapaneseArray = (uJapaneseArray/20).^2*pi;
+    iJapanese2Array = (iJapanese2Array/20).^2*pi;
+    eJapanese2Array = (eJapanese2Array/20).^2*pi;
+    aJapanese2Array = (aJapanese2Array/20).^2*pi;
+    oJapanese2Array = (oJapanese2Array/20).^2*pi;
+    uJapanese2Array = (uJapanese2Array/20).^2*pi;
     %~~~~~~~~~~~~~~~~American~Vowels~in~cm2~~~~~~~~~~~~~~~~~~~~~~
     aAmericanArray  = [1.56 3.10 3.74 2.48 1.28 0.60 0.73 1.28 1.39 1.31 1.43 1.90 3.22 4.44 4.83 3.89 4.72 2.03 2.49 2.82];
     aeAmericanArray = [1.91 2.69 4.53 2.05 1.33 1.44 2.82 4.54 4.04 3.24 2.82 3.20 4.32 5.13 4.17 4.98 6.31 5.65 7.03];
@@ -104,48 +110,53 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %--------Vocal-tract-shapes-with-different-Japanese-vocals---------------------------%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if shapeType  == "iJ" % a Japanese
-        leftover = N-floor(N/16)*16;
-        for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = iJapaneseArray(i) * scaleFromCM2;
+    if shapeType  == "aJ" % a Japanese
+        L = length(aJapanese2Array);
+        leftover = N-floor(N/L)*L;
+        for i = 1:L
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = aJapanese2Array(i) * scaleFromCM2;
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = iJapaneseArray(16) * scaleFromCM2;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = aJapanese2Array(L) * scaleFromCM2;
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "eJ"
-        leftover = N-floor(N/16)*16;
-        for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = eJapaneseArray(i) * scaleFromCM2;
+        L = length(eJapanese2Array);
+        leftover = N-floor(N/L)*L;
+        for i = 1:L
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = eJapanese2Array(i) * scaleFromCM2;
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = eJapaneseArray(16) * scaleFromCM2;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = eJapanese2Array(L) * scaleFromCM2;
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
-    if shapeType  == "aJ"
-        leftover = N-floor(N/16)*16;
-        for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = aJapaneseArray(i) * scaleFromCM2;
+    if shapeType  == "iJ"
+        L = length(iJapanese2Array);
+        leftover = N-floor(N/L)*L;
+        for i = 1:L
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = iJapanese2Array(i) * scaleFromCM2;
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = aJapaneseArray(16) * scaleFromCM2;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = iJapanese2Array(L) * scaleFromCM2;
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "oJ"
-        leftover = N-floor(N/16)*16;
-        for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = oJapaneseArray(i) * scaleFromCM2;
+        L = length(oJapanese2Array);
+        leftover = N-floor(N/L)*L;
+        for i = 1:L
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = oJapanese2Array(i) * scaleFromCM2;
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = oJapaneseArray(16) * scaleFromCM2;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = oJapanese2Array(L) * scaleFromCM2;
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
     if shapeType  == "uJ"
-        leftover = N-floor(N/16)*16;
-        for i = 1:16
-            S(1+i*floor(N/16)-floor(N/16):i*floor(N/16)) = uJapaneseArray(i) * scaleFromCM2;
+        L = length(uJapanese2Array);
+        leftover = N-floor(N/L)*L;
+        for i = 1:L
+            S(1+i*floor(N/L)-floor(N/L):i*floor(N/L)) = uJapanese2Array(i) * scaleFromCM2;
         end
-        S(1+(i+1)*floor(N/16)-floor(N/16):i*floor(N/16)+leftover) = uJapaneseArray(16) * scaleFromCM2;
+        S(1+(i+1)*floor(N/L)-floor(N/L):i*floor(N/L)+leftover) = uJapanese2Array(L) * scaleFromCM2;
         S = transpose(S);
         S = smoothdata(S, 'gaussian', 'SmoothingFactor', 0.05);
     end
