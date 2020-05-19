@@ -41,9 +41,6 @@ rho = 1.138;
 %M=0.04;
 M=4;
 
-M = 0.01; %0.3947;
-% M=4;
-% M = 0.3947;
 %resonant frequency, from Bilbao
 f0 = 0;
 
