@@ -49,7 +49,7 @@ switch mode
         
         imp = sawtooth(2*pi*freq*t/fs);
         
-    case 'camel'
+    case 'glottal_pulse'
         
         t = freq/fs:freq/fs:1+freq/fs;
         e1 = 0.1;
