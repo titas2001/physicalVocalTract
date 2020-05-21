@@ -49,11 +49,11 @@ function [S] = Shape(N, curveStartPos, minWidth, maxWidth, shapeType)
     oJapaneseArray = [12 12 30 22 16 14 16 22 28 34 38 38 32 26 22 14];
     uJapaneseArray = [12 12 30 30 30 30 26 18 14 22 26 24 22 20 14 16];
     %calculate area funcion in cm2
-    iJapanese2Array = (iJapanese2Array/20).^2*pi;
-    eJapanese2Array = (eJapanese2Array/20).^2*pi;
-    aJapanese2Array = (aJapanese2Array/20).^2*pi;
-    oJapanese2Array = (oJapanese2Array/20).^2*pi;
-    uJapanese2Array = (uJapanese2Array/20).^2*pi;
+    iJapanese2Array = (iJapaneseArray/20).^2*pi;
+    eJapanese2Array = (eJapaneseArray/20).^2*pi;
+    aJapanese2Array = (aJapaneseArray/20).^2*pi;
+    oJapanese2Array = (oJapaneseArray/20).^2*pi;
+    uJapanese2Array = (uJapaneseArray/20).^2*pi;
     %~~~~~~~~~~~~~~~~American~Vowels~in~cm2~~~~~~~~~~~~~~~~~~~~~~
     aAmericanArray  = [1.56 3.10 3.74 2.48 1.28 0.60 0.73 1.28 1.39 1.31 1.43 1.90 3.22 4.44 4.83 3.89 4.72 2.03 2.49 2.82];
     aeAmericanArray = [1.91 2.69 4.53 2.05 1.33 1.44 2.82 4.54 4.04 3.24 2.82 3.20 4.32 5.13 4.17 4.98 6.31 5.65 7.03];
