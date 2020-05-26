@@ -30,7 +30,7 @@ if time < 0
 end
 
 t = 1:time;
-
+pressure = 0.09548;
 switch mode
     
     case 'sinepulse'
@@ -38,16 +38,19 @@ switch mode
         imp = sin(2*pi*freq*t/fs) - 1 + (dutycycle/100)*2;
         imp(imp<0) = 0;
         imp = imp/max(imp);
+        imp=imp*pressure;
         
     case 'sawpulse'
         
         imp = sawtooth(2*pi*freq*t/fs) - 1 + (dutycycle/100);
         imp(imp<0) = 0;
         imp = imp/max(imp);
+        imp=imp*pressure;
         
     case 'sawtooth'
         
         imp = sawtooth(2*pi*freq*t/fs);
+        imp=imp*pressure;
         
     case 'glottal_pulse'
         
@@ -70,5 +73,6 @@ switch mode
          wit_noise = awgn(xx, -24, 'measured');
          oioi = xx+0.0001*wit_noise;
          imp = oioi;
-
+         imp = imp/max(imp);
+         imp=imp*pressure;
 end
