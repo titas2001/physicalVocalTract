@@ -30,7 +30,7 @@ if time < 0
 end
 
 t = 1:time;
-pressure = 0.09548;
+pressure = 0.09548; %~70 dB
 switch mode
     
     case 'sinepulse'

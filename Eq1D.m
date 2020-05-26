@@ -2,6 +2,7 @@ clear all;
 close all;
 
 %If looking for Impulse Response set IR != 0
+%Deprecated
 IR = 0;
 
 %Shape parameters
@@ -10,8 +11,6 @@ maxWidth = 0.06;
 minWidth = 0.01;
 shapeType = 'uF';
 
-%fs = 44100;                % time grid sample rate
-%fs = 157870;               % time grid sample rate
 fs = 480e3;                 % time grid sample rate
 Fs = 48e3;                  % playback sample rate
 k = 1 / fs;                 % time step [s]
@@ -35,10 +34,7 @@ c = 353.8;                    %[m/s]
 % Air density at 37°C, 1 atm
 rho = 1.138; 
 
-%Mass per unit length given epsilon value from Bilbao
-%M = 0.01;
-%M=0.3947;
-%M=0.04;
+%Mass per unit length, from Portnoff
 M=4;
 
 %resonant frequency, from Bilbao
@@ -46,10 +42,8 @@ f0 = 0;
 
 % Calculate grid spacing from variables
 h = c * k;
-% L = 0.1765;                      % Tube length [m] 
-% L = 0.165475;
 
-if shapeType(1) == 'u'
+if shapeType(1) == 'u' || shapeType(1) == 'o' % Tube length [m] 
     L = 0.195;
 else
     L = 0.165475;
@@ -103,19 +97,10 @@ for n = 1:dur
     
     %TODO: Bilbao does this, have to understand why
     excit = 0.5*(exciterSign(n)+abs(exciterSign(n)));
-    %excit = exciterSign(n);
-    [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, excit, IR, 6);
+    [u,uNext] = WaveProc(uNext, u, uPrev, wNext, w, wPrev, lambdaSq, beta, k, h, N, L, c, S, rho, M, f0, excit, IR, 1);
     
     %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-    %outUpSample(n) = (rho*c^2/S(N))*(uNext(outPos) - u(outPos)) / k;
     outUpSample(n) = rho*(uNext(outPos) - u(outPos)) / k;
-    
-% %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
-%     if mod(n, sFactor) == 0
-%         out(counter) = VT_fil(n);
-%         counter = counter + 1;
-%     end
-%     %out(n) = uNext(outPos);
 
 %     % Real time states drawing
 %     plot(uNext);
@@ -128,10 +113,10 @@ for n = 1:dur
     u = uNext;
 end
 
+%Filtering and downsampling
 VT_fil = filter(numnum, 1, outUpSample);
 counter = 1;
 for i=1:size(outUpSample)
-    %     Retrieve output, p=(c^2ro/S)dphi/dt, filling output vector
     if mod(i, sFactor) == 0
         out(counter) = VT_fil(i);
         counter = counter + 1;
@@ -146,14 +131,11 @@ if maxOut>minOut
 else
     out = out/minOut;
 end
-% i = 1:floor(length(out)/sFactor);
-% nOut = out(i)/mVal;    % normalized Output
 
-%nOut = lowpass(out, 0.0119*sFactor);
 nOut = out;
 %sound(nOut, Fs);
 
-audiowrite("FrenchUM4S001New.wav",nOut,Fs);
+%audiowrite("FrenchUM4S001New.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;
