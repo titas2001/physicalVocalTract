@@ -8,7 +8,7 @@ IR = 0;
 curveStartPos = 0.8;
 maxWidth = 0.06;
 minWidth = 0.01;
-shapeType = 'uB';
+shapeType = 'uF';
 
 %fs = 44100;                % time grid sample rate
 %fs = 157870;               % time grid sample rate
@@ -63,7 +63,7 @@ d = (c*sqrt(N))/fs;
 lambdaSq = c^2 * k^2 / h^2;
 
 % Exciter frequency
-exciterFreq = 120;           % [Hz]
+exciterFreq = 141;           % [Hz]
 
 % Initialise spatial states u(n+1) and u(n)
 uNext = zeros(N, 1);
@@ -153,7 +153,7 @@ end
 nOut = out;
 %sound(nOut, Fs);
 
-audiowrite("BritishUM4S001New.wav",nOut,Fs);
+audiowrite("FrenchUM4S001New.wav",nOut,Fs);
 
 %Plotting Output
 freqScaling = Fs/playbackDur;

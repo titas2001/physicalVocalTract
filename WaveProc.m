@@ -1,4 +1,4 @@
-%{
+    %{
     TODO: check virtual grid points, especially for boundary conditions
     NB: all equations except n°5 have wrong boundary conditions
 %}
@@ -105,9 +105,9 @@ switch number
              if l == 1 %Closed end - Neumann condition: u(l-1) = u(l+1); S(l-1) = S(l+1)
                 if (~IR)
                     shapeCoeff = (3*S(l) - S(l+1))/(2*S(l));
-                    Q = 2*(1-lambdaSq)*u(l) - uPrev(l) + 2*lambdaSq * u(l+1) + (c^2*k^2/h)*exciter*shapeCoeff + eps*(S(l)^(1/4))*wPrev(l)/2;
+                    Q = 2*(1-lambdaSq)*u(l) - uPrev(l) + 2*lambdaSq * u(l+1) + (c^2*k^2/h)*exciter*shapeCoeff + 2*k*eps*(S(l)^(1/4))*wPrev(l)/S(l);
                     mat21 = 1;
-                    mat22 = k*eps*(S(l)^(1/4))/2;
+                    mat22 = 2*k*eps*(S(l)^(1/4))/S(l);
                 else
                     Q = 2*lambdaSq*u(l+1) + 2*(1-lambdaSq)*u(l) - uPrev(l) + k*eps*(S(l)^(1/4))*wPrev(l)/(4*(S(l)+S(l+1)));
                     mat21 = 1;
